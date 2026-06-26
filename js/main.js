@@ -1,42 +1,28 @@
-/* ═══════════════════════════════════════════════════
-   main.js — Loader, Scroll Reveal, Nav, Form
-   All motion uses native CSS transitions / WAAPI only.
-   No runtime CSS-in-JS. No animation libraries.
-   ═══════════════════════════════════════════════════ */
-
-(function Main() {
+(function appMain() {
   'use strict';
 
-  /* ── 1. LOADER ─────────────────────────────────────
-     CSS handles the exit animation at 450ms.
-     We remove the element from DOM after it fades.
-  ──────────────────────────────────────────────────── */
-  function initLoader() {
-    const loader = document.getElementById('loader');
-    if (!loader) return;
-    // Remove from DOM after CSS animation completes (450ms delay + 300ms fade = 750ms)
-    setTimeout(function() {
-      loader.remove();
+  
+  function killLoader() {
+    const overlay = document.getElementById('loader');
+    if (!overlay) return;
+    setTimeout(() => {
+      overlay.remove();
+      console.log('loader stripped from DOM');
     }, 800);
   }
 
-  /* ── 2. SCROLL REVEAL ──────────────────────────────
-     IntersectionObserver triggers .visible on .reveal-up
-     elements. CSS handles the transition (300–400ms).
-  ──────────────────────────────────────────────────── */
-  function initScrollReveal() {
-    const els = document.querySelectorAll('.reveal-up');
-    if (!els.length) return;
+  
+  function setupScrollReveal() {
+    const hiddenEls = document.querySelectorAll('.reveal-up');
+    if (!hiddenEls.length) return;
 
-    // Skip hero elements — they use CSS keyframe animations instead
-    const heroEls = document.querySelectorAll('.section-hero .reveal-up');
-    heroEls.forEach(function(el) {
-      el.classList.add('visible'); // mark as done so observer skips them
+    // skip the hero section so it triggers immediately
+    document.querySelectorAll('.section-hero .reveal-up').forEach(el => {
+      el.classList.add('visible');
     });
 
-    const observer = new IntersectionObserver(
-      function(entries) {
-        entries.forEach(function(entry) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
             observer.unobserve(entry.target);
@@ -46,157 +32,136 @@
       { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
 
-    els.forEach(function(el) {
-      if (!el.classList.contains('visible')) {
-        observer.observe(el);
-      }
+    hiddenEls.forEach(el => {
+      if (!el.classList.contains('visible')) observer.observe(el);
     });
   }
 
-  /* ── 3. STICKY HEADER STYLE ON SCROLL ── */
-  function initStickyHeader() {
-    const header = document.getElementById('site-header');
-    if (!header) return;
+  //dark header
+  function handleStickyNav() {
+    const nav = document.getElementById('site-header');
+    if (!nav) return;
 
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 20) {
-        header.style.background = 'rgba(0,0,0,0.95)';
-      } else {
-        header.style.background = 'rgba(0,0,0,0.85)';
-      }
+    window.addEventListener('scroll', () => {
+      nav.style.background = window.scrollY > 20 ? 'rgba(0,0,0,0.95)' : 'rgba(0,0,0,0.85)';
     }, { passive: true });
   }
 
-  /* ── 4. MOBILE NAV TOGGLE ── */
-  function initMobileNav() {
-    const toggle = document.getElementById('nav-toggle');
-    const menu   = document.getElementById('nav-menu');
-    if (!toggle || !menu) return;
+  
+  function initMobileMenu() {
+    const btn = document.getElementById('nav-toggle');
+    const menu = document.getElementById('nav-menu');
+    if (!btn || !menu) return;
 
-    toggle.addEventListener('click', function() {
-      const isOpen = menu.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(isOpen));
-      // Animate hamburger to X
-      const spans = toggle.querySelectorAll('span');
-      if (isOpen) {
-        spans[0].style.transform = 'translateY(7px) rotate(45deg)';
-        spans[1].style.transform = 'translateY(-7px) rotate(-45deg)';
+    btn.addEventListener('click', () => {
+      const isExpanded = menu.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(isExpanded));
+      
+      const bars = btn.querySelectorAll('span');
+      if (isExpanded) {
+        bars[0].style.transform = 'translateY(7px) rotate(45deg)';
+        bars[1].style.transform = 'translateY(-7px) rotate(-45deg)';
       } else {
-        spans[0].style.transform = '';
-        spans[1].style.transform = '';
+        bars[0].style.transform = '';
+        bars[1].style.transform = '';
       }
     });
 
-    // Close on nav link click
-    menu.querySelectorAll('a').forEach(function(link) {
-      link.addEventListener('click', function() {
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
         menu.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-        const spans = toggle.querySelectorAll('span');
-        spans[0].style.transform = '';
-        spans[1].style.transform = '';
+        btn.setAttribute('aria-expanded', 'false');
+        btn.querySelectorAll('span').forEach(s => s.style.transform = '');
       });
     });
   }
 
-  /* ── 5. CTA EMAIL FORM ── */
-  function initCTAForm() {
-    const form = document.querySelector('.cta-form');
-    if (!form) return;
+  function handleFormSubmit() {
+    const emailForm = document.querySelector('.cta-form');
+    if (!emailForm) return;
 
-    form.addEventListener('submit', function(e) {
+    emailForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const input = form.querySelector('.cta-input');
-      const btn   = form.querySelector('button[type="submit"]');
-      if (!input || !input.value.trim()) return;
+      const inputEl = emailForm.querySelector('.cta-input');
+      const submitBtn = emailForm.querySelector('button[type="submit"]');
+      if (!inputEl || !inputEl.value.trim()) return;
 
-      // Success state — direct DOM update, no re-render
-      const originalText = btn.textContent;
-      btn.textContent = '✓ Subscribed';
-      btn.style.background = '#1a7a8a';
-      btn.style.borderColor = '#1a7a8a';
-      input.value = '';
-      input.disabled = true;
+      const oldText = submitBtn.textContent;
+      submitBtn.textContent = '✓ Subscribed';
+      submitBtn.style.background = '#1a7a8a';
+      submitBtn.style.borderColor = '#1a7a8a';
+      inputEl.value = '';
+      inputEl.disabled = true;
 
-      setTimeout(function() {
-        btn.textContent = originalText;
-        btn.style.background = '';
-        btn.style.borderColor = '';
-        input.disabled = false;
+    
+      setTimeout(() => {
+        submitBtn.textContent = oldText;
+        submitBtn.style.background = '';
+        submitBtn.style.borderColor = '';
+        inputEl.disabled = false;
       }, 3000);
     });
   }
 
-  /* ── 6. STAT COUNTER ANIMATION ──────────────────────
-     Uses Web Animations API (WAAPI) — native, no library.
-     Counts up numbers when stat cards scroll into view.
-  ──────────────────────────────────────────────────── */
-  function initStatCounters() {
-    const statNums = document.querySelectorAll('.stat-num');
-    if (!statNums.length) return;
+  // number counters
+  function runStatCounters() {
+    const nodes = document.querySelectorAll('.stat-num');
+    if (!nodes.length) return;
 
-    // Extract numeric value and suffix from display text set by HTML
-    const statData = [
-      { el: statNums[0], target: 12,   suffix: 'ms', prefix: '' },
-      { el: statNums[1], target: 10,   suffix: 'x',  prefix: '' },
-      { el: statNums[2], target: 98,   suffix: '%',  prefix: '' },
-      { el: statNums[3], target: 2000, suffix: '+',  prefix: '' },
+    const targets = [
+      { el: nodes[0], val: 12 },
+      { el: nodes[1], val: 10 },
+      { el: nodes[2], val: 98 },
+      { el: nodes[3], val: 2000 },
     ];
 
-    const observer = new IntersectionObserver(
-      function(entries) {
-        entries.forEach(function(entry) {
-          if (!entry.isIntersecting) return;
-          const data = statData.find(function(d) { return d.el === entry.target; });
-          if (!data) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const match = targets.find(t => t.el === entry.target);
+        if (!match) return;
 
-          observer.unobserve(entry.target);
-          animateCount(data);
-        });
-      },
-      { threshold: 0.5 }
-    );
+        observer.unobserve(entry.target);
+        doCountUp(match);
+      });
+    }, { threshold: 0.5 });
 
-    statData.forEach(function(d) { if (d.el) observer.observe(d.el); });
+    targets.forEach(t => observer.observe(t.el));
   }
 
-  function animateCount(data) {
-    const duration = 1200;
-    const start    = performance.now();
-    const isK      = data.target >= 1000;
+  function doCountUp(data) {
+    const totalTime = 1200;
+    const startTime = performance.now();
 
-    function frame(now) {
-      const elapsed  = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      // Ease-out cubic
-      const eased    = 1 - Math.pow(1 - progress, 3);
-      const current  = Math.round(data.target * eased);
+    function update(timeNow) {
+      const diff = timeNow - startTime;
+      const pct = Math.min(diff / totalTime, 1);
+      const eased = 1 - Math.pow(1 - pct, 3); // ease out
+      const currentVal = Math.round(data.val * eased);
 
-      // Format display: 2000 → "2K"
-      const display = current >= 1000 ? Math.round(current / 1000) + 'K' : String(current);
-      // Only update the text node that holds the number (the span wrapping .stat-unit is a child)
-      // We use firstChild trick to avoid touching the <span class="stat-unit"> child
+      const textToShow = currentVal >= 1000 ? Math.round(currentVal / 1000) + 'K' : String(currentVal);
+      
+      // keep the unit span intact, just update the number
       if (data.el.firstChild && data.el.firstChild.nodeType === Node.TEXT_NODE) {
-        data.el.firstChild.textContent = display;
+        data.el.firstChild.textContent = textToShow;
       } else {
-        data.el.insertAdjacentText('afterbegin', display);
+        data.el.insertAdjacentText('afterbegin', textToShow);
       }
 
-      if (progress < 1) requestAnimationFrame(frame);
+      if (pct < 1) requestAnimationFrame(update);
     }
-
-    requestAnimationFrame(frame);
+    requestAnimationFrame(update);
   }
 
-  /* ── BOOT ── */
-  document.addEventListener('DOMContentLoaded', function() {
-    initLoader();
-    initScrollReveal();
-    initStickyHeader();
-    initMobileNav();
-    initCTAForm();
-    initStatCounters();
-    console.log('[Main] All modules initialised.');
+  document.addEventListener('DOMContentLoaded', () => {
+    killLoader();
+    setupScrollReveal();
+    handleStickyNav();
+    initMobileMenu();
+    handleFormSubmit();
+    runStatCounters();
+    
+    console.log('App ready. Let\'s go.');
   });
 
 }());

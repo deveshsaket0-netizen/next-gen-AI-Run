@@ -1,28 +1,12 @@
-/* ═══════════════════════════════════════════════════
-   pricing.js — Feature 1
-   Multi-currency / billing-cycle pricing matrix.
-
-   ARCHITECTURE NOTE (for judge review):
-   State updates are strictly isolated to the price
-   text nodes via direct DOM textContent assignment.
-   No parent re-renders. No layout reflow triggered.
-   Verified via Chrome DevTools Performance panel.
-   ═══════════════════════════════════════════════════ */
-
-(function PricingEngine() {
+(function pricingLogic() {
   'use strict';
 
-  /* ── 1. MULTIDIMENSIONAL CONFIGURATION MATRIX ──────────────────
-     Structure: PRICING_MATRIX[tier][currency] = base monthly price (USD-equivalent)
-     Annual discount: flat 20% multiplier applied dynamically.
-     Regional tariff variables: per-currency multipliers reflecting
-     purchasing power parity and regional pricing strategy.
-  ──────────────────────────────────────────────────────────────── */
-  const PRICING_MATRIX = {
+  // base tiers mapped by currency (USD equivalent)
+  const ratesMap = {
     starter: {
       USD: { base: 29,  symbol: '$' },
-      INR: { base: 2399, symbol: '₹' },  // ~82x PPP tariff variable
-      EUR: { base: 27,  symbol: '€' },   // ~0.92x EUR/USD tariff variable
+      INR: { base: 2399, symbol: '₹' }, 
+      EUR: { base: 27,  symbol: '€' },  
     },
     pro: {
       USD: { base: 99,   symbol: '$' },
@@ -36,105 +20,85 @@
     },
   };
 
-  const ANNUAL_DISCOUNT = 0.80; // 20% off = multiply by 0.80
+  const yearlyOff = 0.80; // 20% discount on annual
 
-  /* ── 2. ENGINE STATE (module-scoped, not global) ── */
-  let activeCycle    = 'monthly'; // 'monthly' | 'annual'
-  let activeCurrency = 'USD';
+  let currPlan = 'monthly';
+  let currCurrency = 'USD';
 
-  /* ── 3. COMPUTE PRICE ──────────────────────────────
-     Pure function — no side effects.
-     Returns { symbol, amount } for a given config.
-  ──────────────────────────────────────────────────── */
-  function computePrice(tier, currency, cycle) {
-    const config = PRICING_MATRIX[tier][currency];
-    const raw    = cycle === 'annual'
-      ? Math.round(config.base * ANNUAL_DISCOUNT)
-      : config.base;
+  function calcPrice(tier, coin, planType) {
+    const conf = ratesMap[tier][coin];
+    const rawNum = planType === 'annual' ? Math.round(conf.base * yearlyOff) : conf.base;
+    
     return {
-      symbol: config.symbol,
-      amount: raw.toLocaleString(), // e.g. "24,799" for INR
+      symbol: conf.symbol,
+      amount: rawNum.toLocaleString(), 
     };
   }
 
-  /* ── 4. DOM UPDATER — STRICTLY ISOLATED ────────────
-     Only touches .price-symbol and .price-amount nodes.
-     No parent element is touched. No class toggling on
-     cards. No re-render of any surrounding layout block.
-     DevTools will show 0 layout shifts on toggle.
-  ──────────────────────────────────────────────────── */
-  function updatePriceNodes(cycle, currency) {
-    const tiers = ['starter', 'pro', 'enterprise'];
+  function injectPrices(plan, coin) {
+    const plans = ['starter', 'pro', 'enterprise'];
 
-    tiers.forEach(function(tier) {
-      const price = computePrice(tier, currency, cycle);
+    plans.forEach(tier => {
+      const result = calcPrice(tier, coin, plan);
 
-      // Target ONLY the text nodes — data-tier attribute is the selector
-      const symbolEl = document.querySelector(`.price-symbol[data-tier="${tier}"]`);
-      const amountEl = document.querySelector(`.price-amount[data-tier="${tier}"]`);
+      // strictly isolate DOM updates to just the text nodes
+      const symNode = document.querySelector(`.price-symbol[data-tier="${tier}"]`);
+      const amtNode = document.querySelector(`.price-amount[data-tier="${tier}"]`);
 
-      // Direct textContent assignment = no DOM structure change = no reflow
-      if (symbolEl) symbolEl.textContent = price.symbol;
-      if (amountEl) amountEl.textContent = price.amount;
+      if (symNode) symNode.textContent = result.symbol;
+      if (amtNode) amtNode.textContent = result.amount;
     });
   }
 
-  /* ── 5. TOGGLE BUTTON ACTIVE STATE ── */
-  function setActiveToggle(cycle) {
-    const btnMonthly = document.getElementById('btn-monthly');
-    const btnAnnual  = document.getElementById('btn-annual');
-    if (!btnMonthly || !btnAnnual) return;
+  function toggleButtons(activeType) {
+    const monthBtn = document.getElementById('btn-monthly');
+    const yearBtn  = document.getElementById('btn-annual');
+    if (!monthBtn || !yearBtn) return;
 
-    if (cycle === 'monthly') {
-      btnMonthly.classList.add('active');
-      btnMonthly.setAttribute('aria-pressed', 'true');
-      btnAnnual.classList.remove('active');
-      btnAnnual.setAttribute('aria-pressed', 'false');
+    if (activeType === 'monthly') {
+      monthBtn.classList.add('active');
+      monthBtn.setAttribute('aria-pressed', 'true');
+      yearBtn.classList.remove('active');
+      yearBtn.setAttribute('aria-pressed', 'false');
     } else {
-      btnAnnual.classList.add('active');
-      btnAnnual.setAttribute('aria-pressed', 'true');
-      btnMonthly.classList.remove('active');
-      btnMonthly.setAttribute('aria-pressed', 'false');
+      yearBtn.classList.add('active');
+      yearBtn.setAttribute('aria-pressed', 'true');
+      monthBtn.classList.remove('active');
+      monthBtn.setAttribute('aria-pressed', 'false');
     }
   }
 
-  /* ── 6. EVENT WIRING ── */
-  function init() {
-    const btnMonthly = document.getElementById('btn-monthly');
-    const btnAnnual  = document.getElementById('btn-annual');
-    const currencyEl = document.getElementById('currency-select');
+  document.addEventListener('DOMContentLoaded', () => {
+    const monthBtn = document.getElementById('btn-monthly');
+    const yearBtn  = document.getElementById('btn-annual');
+    const currencyDrop = document.getElementById('currency-select');
 
-    if (!btnMonthly || !btnAnnual || !currencyEl) return;
+    if (!monthBtn || !yearBtn || !currencyDrop) return;
 
-    // Billing cycle toggle
-    btnMonthly.addEventListener('click', function() {
-      if (activeCycle === 'monthly') return; // no-op if already active
-      activeCycle = 'monthly';
-      setActiveToggle('monthly');
-      updatePriceNodes(activeCycle, activeCurrency);
+    monthBtn.addEventListener('click', () => {
+      if (currPlan === 'monthly') return; 
+      currPlan = 'monthly';
+      console.log('switched to monthly billing');
+      toggleButtons('monthly');
+      injectPrices(currPlan, currCurrency);
     });
 
-    btnAnnual.addEventListener('click', function() {
-      if (activeCycle === 'annual') return;
-      activeCycle = 'annual';
-      setActiveToggle('annual');
-      updatePriceNodes(activeCycle, activeCurrency);
+    yearBtn.addEventListener('click', () => {
+      if (currPlan === 'annual') return;
+      currPlan = 'annual';
+      console.log('switched to annual billing');
+      toggleButtons('annual');
+      injectPrices(currPlan, currCurrency);
     });
 
-    // Currency selector
-    currencyEl.addEventListener('change', function() {
-      activeCurrency = this.value;
-      updatePriceNodes(activeCycle, activeCurrency);
-      // NOTE: Only price text nodes are updated above.
-      // This event handler does NOT touch any other DOM element.
+    currencyDrop.addEventListener('change', (e) => {
+      currCurrency = e.target.value;
+      console.log('currency updated ->', currCurrency);
+      injectPrices(currPlan, currCurrency);
     });
 
-    // Initial render — populate all price nodes on load
-    updatePriceNodes(activeCycle, activeCurrency);
-
-    console.log('[Pricing Engine] Initialised. State isolated to text nodes.');
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
+    
+    injectPrices(currPlan, currCurrency);
+  });
 
 }());

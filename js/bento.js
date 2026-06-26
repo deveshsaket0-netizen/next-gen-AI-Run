@@ -1,24 +1,10 @@
-/* ═══════════════════════════════════════════════════
-   bento.js — Feature 2
-   Bento Grid (desktop) ↔ Accordion (mobile)
-   with active-index context lock on resize.
-
-   RULES COMPLIANCE:
-   ✓ Zero external libraries (no Framer Motion, Radix, etc.)
-   ✓ Pure CSS transitions for open/close (max-height)
-   ✓ Accordion written entirely from scratch
-   ✓ Context lock: active bento index transfers to
-     accordion state when crossing the 640px breakpoint
-   ═══════════════════════════════════════════════════ */
-
-(function BentoAccordion() {
+(function bentoUI() {
   'use strict';
 
-  /* ── BREAKPOINT must match CSS ── */
-  const MOBILE_BP = 640;
+  const mobileBreak = 640;
 
-  /* ── FEATURE DATA — single source of truth ── */
-  const FEATURES = [
+  // feature list
+  const gridItems = [
     {
       index: 0,
       icon:  'assets/icons/interface/link-solid.svg',
@@ -77,91 +63,49 @@
     },
   ];
 
-  /* ── SHARED STATE ─────────────────────────────────
-     activeIndex: the currently active/hovered feature.
-     -1 = none active.
-     This single variable is the "context lock" — it
-     bridges bento hover state to accordion open state.
-  ──────────────────────────────────────────────────── */
-  let activeIndex = -1;
+  let activeIdx = -1; 
+  let currView = null;
 
-  /* ─────────────────────────────────────────────────
-     BENTO: set active card
-  ──────────────────────────────────────────────────── */
   function setBentoActive(index) {
-    activeIndex = index;
+    activeIdx = index;
     const cards = document.querySelectorAll('.bento-card');
-    cards.forEach(function(card) {
+    cards.forEach(card => {
       const i = parseInt(card.getAttribute('data-index'), 10);
       card.classList.toggle('active', i === index);
     });
   }
 
   function clearBentoActive() {
-    // Only clear the visual — don't reset activeIndex to -1.
-    // We need to remember the LAST hovered index for the context lock.
     const cards = document.querySelectorAll('.bento-card');
-    cards.forEach(function(card) { card.classList.remove('active'); });
+    cards.forEach(card => card.classList.remove('active'));
   }
 
-  /* ─────────────────────────────────────────────────
-     BENTO: wire hover + keyboard events
-  ──────────────────────────────────────────────────── */
-  function initBento() {
+  function setupBentoEvents() {
     const cards = document.querySelectorAll('.bento-card');
-    cards.forEach(function(card) {
+    cards.forEach(card => {
       const idx = parseInt(card.getAttribute('data-index'), 10);
 
-      card.addEventListener('mouseenter', function() {
-        setBentoActive(idx);
-      });
-
-      card.addEventListener('mouseleave', function() {
-        // Keep activeIndex set (context lock), just remove visual class
-        clearBentoActive();
-      });
-
-      card.addEventListener('focus', function() {
-        setBentoActive(idx);
-      });
-
-      card.addEventListener('blur', function() {
-        clearBentoActive();
-      });
-
-      // Also update activeIndex on click (persists for resize)
-      card.addEventListener('click', function() {
-        setBentoActive(idx);
-      });
+      card.addEventListener('mouseenter', () => setBentoActive(idx));
+      card.addEventListener('mouseleave', () => clearBentoActive());
+      card.addEventListener('focus', () => setBentoActive(idx));
+      card.addEventListener('blur', () => clearBentoActive());
+      card.addEventListener('click', () => setBentoActive(idx));
     });
   }
 
-  /* ─────────────────────────────────────────────────
-     ACCORDION: build from FEATURES data
-  ──────────────────────────────────────────────────── */
-  function buildAccordion() {
-    const container = document.getElementById('accordion-list');
-    if (!container) return;
+  // generate accordion html
+  function renderAccordion() {
+    const wrapper = document.getElementById('accordion-list');
+    if (!wrapper) return;
 
-    container.innerHTML = FEATURES.map(function(f) {
-      return `
+    wrapper.innerHTML = gridItems.map(f => `
         <div class="accordion-item" data-index="${f.index}" role="listitem">
-          <button
-            class="accordion-trigger"
-            aria-expanded="false"
-            aria-controls="acc-body-${f.index}"
-            data-index="${f.index}">
+          <button class="accordion-trigger" aria-expanded="false" aria-controls="acc-body-${f.index}" data-index="${f.index}">
             <span class="accordion-trigger-icon">
               <img src="${f.icon}" alt="" aria-hidden="true" width="18" height="18"/>
             </span>
             <span class="accordion-trigger-text">${f.title}</span>
-            <img
-              src="assets/icons/navigation/chevron-down.svg"
-              alt=""
-              aria-hidden="true"
-              class="accordion-chevron"
-              width="16"
-              height="16"/>
+            <img src="assets/icons/navigation/chevron-down.svg" alt="" aria-hidden="true" class="accordion-chevron" width="16" height="16"/>
           </button>
           <div class="accordion-body" id="acc-body-${f.index}" role="region" aria-label="${f.title}">
             <div class="accordion-body-inner">
@@ -169,142 +113,110 @@
             </div>
           </div>
         </div>
-      `;
-    }).join('');
+      `).join('');
 
-    // Wire click events
-    container.querySelectorAll('.accordion-trigger').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        const idx  = parseInt(btn.getAttribute('data-index'), 10);
+    wrapper.querySelectorAll('.accordion-trigger').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.getAttribute('data-index'), 10);
         const item = btn.closest('.accordion-item');
-        const isOpen = item.classList.contains('active');
+        const isAlreadyOpen = item.classList.contains('active');
 
-        // Close all items first (single-open accordion)
-        closeAllAccordion();
+        closeAllPanels();
 
-        if (!isOpen) {
-          openAccordionItem(item, idx);
+        if (!isAlreadyOpen) {
+          openPanel(item, idx);
         } else {
-          // Clicking open item closes it; reset activeIndex
-          activeIndex = -1;
+          activeIdx = -1;
         }
       });
     });
   }
 
-  function openAccordionItem(item, idx) {
+  function openPanel(item, idx) {
     item.classList.add('active');
     const trigger = item.querySelector('.accordion-trigger');
-    const body    = item.querySelector('.accordion-body');
+    const body = item.querySelector('.accordion-body');
     if (trigger) trigger.setAttribute('aria-expanded', 'true');
-    if (body)    body.style.maxHeight = body.scrollHeight + 'px';
-    activeIndex = idx;
+    if (body) body.style.maxHeight = body.scrollHeight + 'px';
+    activeIdx = idx;
   }
 
-  function closeAllAccordion() {
-    const items = document.querySelectorAll('.accordion-item');
-    items.forEach(function(item) {
+  function closeAllPanels() {
+    document.querySelectorAll('.accordion-item').forEach(item => {
       item.classList.remove('active');
       const trigger = item.querySelector('.accordion-trigger');
-      const body    = item.querySelector('.accordion-body');
+      const body = item.querySelector('.accordion-body');
       if (trigger) trigger.setAttribute('aria-expanded', 'false');
-      if (body)    body.style.maxHeight = '0';
+      if (body) body.style.maxHeight = '0';
     });
   }
 
-  /* ─────────────────────────────────────────────────
-     CONTEXT LOCK: transfer active index across layouts
-     Called when window crosses the 640px breakpoint.
-  ──────────────────────────────────────────────────── */
-  function transferContextToAccordion() {
-    if (activeIndex === -1) return; // nothing was active — no transfer needed
-
-    const items = document.querySelectorAll('.accordion-item');
-    items.forEach(function(item) {
+  
+  function syncToAccordion() {
+    if (activeIdx === -1) return;
+    document.querySelectorAll('.accordion-item').forEach(item => {
       const idx = parseInt(item.getAttribute('data-index'), 10);
-      if (idx === activeIndex) {
-        openAccordionItem(item, activeIndex);
-      }
+      if (idx === activeIdx) openPanel(item, activeIdx);
     });
   }
 
-  function transferContextToBento() {
-    // When switching back to desktop, highlight the last active card
-    if (activeIndex === -1) return;
-    setBentoActive(activeIndex);
-    // Auto-clear visual after 1.5s (user is now on desktop, hover takes over)
-    setTimeout(clearBentoActive, 1500);
+  function syncToBento() {
+    if (activeIdx === -1) return;
+    setBentoActive(activeIdx);
+    setTimeout(clearBentoActive, 1500); 
   }
 
-  /* ─────────────────────────────────────────────────
-     LAYOUT MODE: show/hide bento vs accordion
-  ──────────────────────────────────────────────────── */
-  let currentMode = null; // 'desktop' | 'mobile'
-
-  function getMode() {
-    return window.innerWidth <= MOBILE_BP ? 'mobile' : 'desktop';
+  function getViewType() {
+    return window.innerWidth <= mobileBreak ? 'mobile' : 'desktop';
   }
 
-  function applyMode(mode) {
-    const bentoGrid    = document.getElementById('bento-grid');
-    const accordionList = document.getElementById('accordion-list');
-    if (!bentoGrid || !accordionList) return;
+  function toggleLayout(mode) {
+    const bento = document.getElementById('bento-grid');
+    const acc = document.getElementById('accordion-list');
+    if (!bento || !acc) return;
 
     if (mode === 'mobile') {
-      bentoGrid.style.display = 'none';
-      accordionList.removeAttribute('hidden');
+      bento.style.display = 'none';
+      acc.removeAttribute('hidden');
     } else {
-      bentoGrid.style.display = ''; // restore to CSS grid
-      accordionList.setAttribute('hidden', '');
+      bento.style.display = '';
+      acc.setAttribute('hidden', '');
     }
   }
 
-  /* ─────────────────────────────────────────────────
-     RESIZE HANDLER with debounce
-     — Detects breakpoint crossing
-     — Transfers context on crossing (NOT on every resize)
-  ──────────────────────────────────────────────────── */
-  let resizeTimer = null;
+  let resizeWait = null;
 
-  function onResize() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-      const newMode = getMode();
-      if (newMode === currentMode) return; // didn't cross breakpoint
+  function handleResize() {
+    clearTimeout(resizeWait);
+    resizeWait = setTimeout(() => {
+      const newView = getViewType();
+      if (newView === currView) return; 
 
-      const prevMode = currentMode;
-      currentMode = newMode;
-      applyMode(newMode);
+      console.log('layout flip:', currView, '->', newView);
 
-      // Context lock: transfer active index to the new layout
-      if (newMode === 'mobile' && prevMode === 'desktop') {
-        // Crossing desktop → mobile: open the corresponding accordion panel
-        closeAllAccordion();
-        transferContextToAccordion();
-      } else if (newMode === 'desktop' && prevMode === 'mobile') {
-        // Crossing mobile → desktop: highlight the bento card briefly
+      const oldView = currView;
+      currView = newView;
+      toggleLayout(newView);
+
+      if (newView === 'mobile' && oldView === 'desktop') {
+        closeAllPanels();
+        syncToAccordion();
+      } else if (newView === 'desktop' && oldView === 'mobile') {
         clearBentoActive();
-        transferContextToBento();
+        syncToBento();
       }
-    }, 50); // 50ms debounce — fast enough to feel instant
+    }, 50); 
   }
 
-  /* ─────────────────────────────────────────────────
-     INIT
-  ──────────────────────────────────────────────────── */
-  function init() {
-    buildAccordion();
-    initBento();
+  document.addEventListener('DOMContentLoaded', () => {
+    renderAccordion();
+    setupBentoEvents();
 
-    // Set initial layout mode without triggering context transfer
-    currentMode = getMode();
-    applyMode(currentMode);
+    currView = getViewType();
+    toggleLayout(currView);
 
-    window.addEventListener('resize', onResize);
-
-    console.log('[Bento/Accordion] Initialised. Context lock active.');
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
+    window.addEventListener('resize', handleResize);
+    console.log('bento initialized');
+  });
 
 }());
