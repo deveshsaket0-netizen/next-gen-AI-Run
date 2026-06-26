@@ -1,3 +1,5 @@
+re-write this readme.md file
+make sure its not obivous that its written by AI, dont add any comments for editor
 Armory — AI Automation Platform
 
 FrontEnd Battle 3.0 - VibeCoding Competition (IIT Bhubaneswar) Submission
@@ -28,7 +30,7 @@ A premium, high-converting landing page built under a strict 4-hour sprint const
 
 Live Deployment: [[Insert your Vercel/Netlify link here](https://next-gen-ai-101.vercel.app/)]
 
-Demo Video: [[Insert your Google Drive link here](https://drive.google.com/file/d/1vnRlUo5DD-5KY937Q78EEehAAQJVK_KQ/view?usp=sharing)] 
+Demo Video: [[Insert your Google Drive link here](https://drive.google.com/file/d/1vnRlUo5DD-5KY937Q78EEehAAQJVK_KQ/view?usp=sharing)] 
 🏗️ Architectural Strategy
 
 To strictly adhere to the "Do Not Trigger Global Re-renders" constraint, this project was architected using Vanilla JavaScript and Native CSS instead of React or Next.js.
