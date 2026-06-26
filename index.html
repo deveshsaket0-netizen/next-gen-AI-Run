@@ -18,39 +18,26 @@
   <meta property="og:image" content="https://armory.ai/og-image.png" />
   <meta property="og:site_name" content="Armory" />
 
-  
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@armoryai" />
   <meta name="twitter:title" content="Armory — Power Your Future With AI" />
   <meta name="twitter:description" content="Deploy custom enterprise agents and automate complex workflows. Scale your intelligence with Armory today." />
   <meta name="twitter:image" content="https://armory.ai/og-image.png" />
 
-  
+  <!-- schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Armory",
-    "description": "Deploy custom enterprise agents and automate complex workflows. Scale your intelligence with Armory — the AI-native platform built for production teams.",
+    "description": "Deploy custom enterprise agents and automate complex workflows.",
     "url": "https://armory.ai/",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
     "offers": [
-      {
-        "@type": "Offer",
-        "name": "Starter",
-        "priceCurrency": "USD"
-      },
-      {
-        "@type": "Offer",
-        "name": "Pro",
-        "priceCurrency": "USD"
-      },
-      {
-        "@type": "Offer",
-        "name": "Enterprise",
-        "priceCurrency": "USD"
-      }
+      { "@type": "Offer", "name": "Starter", "priceCurrency": "USD" },
+      { "@type": "Offer", "name": "Pro", "priceCurrency": "USD" },
+      { "@type": "Offer", "name": "Enterprise", "priceCurrency": "USD" }
     ],
     "publisher": {
       "@type": "Organization",
@@ -60,24 +47,22 @@
   }
   </script>
 
-  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-  
   <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
 
-  
+  <!-- initial loader screen -->
   <div id="loader" aria-hidden="true">
     <span class="loader-text">// initializing armory</span>
     <div class="loader-bar"><div class="loader-fill"></div></div>
   </div>
 
-  
+  <!-- nav -->
   <header id="site-header" role="banner">
     <nav class="nav-inner" aria-label="Main navigation">
       <a href="/" class="nav-logo" aria-label="Armory home">
@@ -101,7 +86,6 @@
 
   <main id="main-content">
 
-    
     <section id="hero" class="section-hero" aria-labelledby="hero-heading">
       <div class="hero-bg-grid" aria-hidden="true"></div>
       <div class="hero-bg-glow" aria-hidden="true"></div>
@@ -116,7 +100,7 @@
             <span class="logo-pill">United Healthcare</span>
             <span class="logo-pill">Vertex Labs</span>
             <span class="logo-pill">FlowState AI</span>
- 
+            <!-- duplicate for infinite loop -->
             <span class="logo-pill" aria-hidden="true">Aetna</span>
             <span class="logo-pill" aria-hidden="true">Cigna</span>
             <span class="logo-pill" aria-hidden="true">Anthem</span>
@@ -283,74 +267,57 @@
         <h2 id="features-heading" class="section-title reveal-up">Engineered for autonomy</h2>
 
         <div class="bento-grid" id="bento-grid" role="list" aria-label="Product features">
-          <article class="bento-card bento-lg" data-index="0" role="listitem" tabindex="0" aria-label="Secure Guard feature">
-            <div class="bento-icon">
-              <img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="28" height="28"/>
-            </div>
+          <article class="bento-card bento-lg" data-index="0" role="listitem" tabindex="0">
+            <div class="bento-icon"><img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="28" height="28"/></div>
             <h3>Secure Guard</h3>
             <p>End-to-end encryption with zero-trust architecture. Every agent runs in an isolated execution environment.</p>
             <span class="bento-tag">Security</span>
           </article>
-          <article class="bento-card bento-sm" data-index="1" role="listitem" tabindex="0" aria-label="Agent Build feature">
-            <div class="bento-icon">
-              <img src="assets/icons/interface/cog-8-tooth.svg" alt="" aria-hidden="true" width="28" height="28"/>
-            </div>
+          <article class="bento-card bento-sm" data-index="1" role="listitem" tabindex="0">
+            <div class="bento-icon"><img src="assets/icons/interface/cog-8-tooth.svg" alt="" aria-hidden="true" width="28" height="28"/></div>
             <h3>Agent Build</h3>
             <p>Visual agent builder with drag-and-drop logic nodes.</p>
             <span class="bento-tag">Builder</span>
           </article>
-          <article class="bento-card bento-sm" data-index="2" role="listitem" tabindex="0" aria-label="Cloud Scale feature">
-            <div class="bento-icon">
-              <img src="assets/icons/data-viz/cube-16-solid.svg" alt="" aria-hidden="true" width="28" height="28"/>
-            </div>
+          <article class="bento-card bento-sm" data-index="2" role="listitem" tabindex="0">
+            <div class="bento-icon"><img src="assets/icons/data-viz/cube-16-solid.svg" alt="" aria-hidden="true" width="28" height="28"/></div>
             <h3>Cloud Scale</h3>
             <p>Auto-scale from 1 to 10,000 concurrent agents without infrastructure changes.</p>
             <span class="bento-tag">Infrastructure</span>
           </article>
-          <article class="bento-card bento-sm" data-index="3" role="listitem" tabindex="0" aria-label="Data Mining feature">
-            <div class="bento-icon">
-              <img src="assets/icons/data-viz/chart-pie.svg" alt="" aria-hidden="true" width="28" height="28"/>
-            </div>
+          <article class="bento-card bento-sm" data-index="3" role="listitem" tabindex="0">
+            <div class="bento-icon"><img src="assets/icons/data-viz/chart-pie.svg" alt="" aria-hidden="true" width="28" height="28"/></div>
             <h3>Data Mining</h3>
             <p>Extract structured insights from unstructured data streams at scale.</p>
             <span class="bento-tag">Analytics</span>
           </article>
-          <article class="bento-card bento-lg bento-lg-right" data-index="4" role="listitem" tabindex="0" aria-label="Infinite Visual Canvas feature">
-            <div class="bento-icon">
-              <img src="assets/icons/interface/search.svg" alt="" aria-hidden="true" width="28" height="28"/>
-            </div>
+          <article class="bento-card bento-lg bento-lg-right" data-index="4" role="listitem" tabindex="0">
+            <div class="bento-icon"><img src="assets/icons/interface/search.svg" alt="" aria-hidden="true" width="28" height="28"/></div>
             <h3>Infinite Visual Canvas</h3>
             <p>Design multi-agent workflows on an infinite, pannable canvas. Connect data sources, logic gates, and output nodes with precision.</p>
             <span class="bento-tag">Design</span>
           </article>
-          <article class="bento-card bento-sm" data-index="5" role="listitem" tabindex="0" aria-label="Autonomous Execution feature">
-            <div class="bento-icon">
-              <img src="assets/icons/data-viz/arrow-trending-up.svg" alt="" aria-hidden="true" width="28" height="28"/>
-            </div>
+          <article class="bento-card bento-sm" data-index="5" role="listitem" tabindex="0">
+            <div class="bento-icon"><img src="assets/icons/data-viz/arrow-trending-up.svg" alt="" aria-hidden="true" width="28" height="28"/></div>
             <h3>Autonomous Execution</h3>
             <p>Agents self-schedule, self-heal, and adapt to changing data conditions without human intervention.</p>
             <span class="bento-tag">Automation</span>
           </article>
-          <article class="bento-card bento-sm" data-index="6" role="listitem" tabindex="0" aria-label="End-to-End Encryption feature">
-            <div class="bento-icon">
-              <img src="assets/icons/interface/link.svg" alt="" aria-hidden="true" width="28" height="28"/>
-            </div>
+          <article class="bento-card bento-sm" data-index="6" role="listitem" tabindex="0">
+            <div class="bento-icon"><img src="assets/icons/interface/link.svg" alt="" aria-hidden="true" width="28" height="28"/></div>
             <h3>End-to-End Encryption</h3>
             <p>AES-256 encryption at rest and in transit across all agent communications.</p>
             <span class="bento-tag">Security</span>
           </article>
-          <article class="bento-card bento-sm" data-index="7" role="listitem" tabindex="0" aria-label="Production-Ready Stack feature">
-            <div class="bento-icon">
-              <img src="assets/icons/interface/arrow-path.svg" alt="" aria-hidden="true" width="28" height="28"/>
-            </div>
+          <article class="bento-card bento-sm" data-index="7" role="listitem" tabindex="0">
+            <div class="bento-icon"><img src="assets/icons/interface/arrow-path.svg" alt="" aria-hidden="true" width="28" height="28"/></div>
             <h3>Production-Ready Stack</h3>
             <p>Ship to production the same day. 99.98% uptime SLA with automatic rollbacks.</p>
             <span class="bento-tag">DevOps</span>
           </article>
         </div>
 
-        <div class="accordion-list" id="accordion-list" aria-label="Product features" hidden>
-        </div>
+        <div class="accordion-list" id="accordion-list" aria-label="Product features" hidden></div>
       </div>
     </section>
 
@@ -361,38 +328,14 @@
           Armory bridges the gap between your data and your tools.
         </h2>
         <div class="integrations-grid reveal-up" aria-label="Integration partners">
-          <div class="integration-pill">
-            <img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>
-            Salesforce
-          </div>
-          <div class="integration-pill">
-            <img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>
-            Snowflake
-          </div>
-          <div class="integration-pill">
-            <img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>
-            Databricks
-          </div>
-          <div class="integration-pill">
-            <img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>
-            AWS
-          </div>
-          <div class="integration-pill">
-            <img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>
-            Google Cloud
-          </div>
-          <div class="integration-pill">
-            <img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>
-            Azure
-          </div>
-          <div class="integration-pill">
-            <img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>
-            Stripe
-          </div>
-          <div class="integration-pill">
-            <img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>
-            HubSpot
-          </div>
+          <div class="integration-pill"><img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>Salesforce</div>
+          <div class="integration-pill"><img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>Snowflake</div>
+          <div class="integration-pill"><img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>Databricks</div>
+          <div class="integration-pill"><img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>AWS</div>
+          <div class="integration-pill"><img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>Google Cloud</div>
+          <div class="integration-pill"><img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>Azure</div>
+          <div class="integration-pill"><img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>Stripe</div>
+          <div class="integration-pill"><img src="assets/icons/interface/link-solid.svg" alt="" aria-hidden="true" width="16" height="16"/>HubSpot</div>
         </div>
       </div>
     </section>
@@ -422,7 +365,6 @@
         </div>
 
         <div class="pricing-grid reveal-up">
-
           <article class="pricing-card" aria-label="Starter plan">
             <div class="pricing-card-header">
               <h3>Starter</h3>
@@ -482,7 +424,6 @@
             </ul>
             <a href="#get-started" class="btn-ghost btn-full">&gt; Contact Us</a>
           </article>
-
         </div>
       </div>
     </section>
@@ -567,19 +508,11 @@
               <p>Enterprise plans include a 99.98% uptime SLA with automatic failover and rollback. All plans benefit from our globally distributed infrastructure with 12ms average latency.</p>
             </div>
           </details>
-          <details class="faq-item">
-            <summary class="faq-question">
-              Can I deploy Armory on-premise?
-              <img src="assets/icons/navigation/chevron-down.svg" alt="" aria-hidden="true" class="faq-chevron" width="18" height="18"/>
-            </summary>
-            <div class="faq-answer">
-              <p>Yes. Enterprise plans support on-premise and private cloud deployments. Contact our team to discuss your infrastructure requirements.</p>
-            </div>
-          </details>
         </div>
       </div>
     </section>
 
+    <!-- cta area -->
     <section id="get-started" class="section-cta" aria-labelledby="cta-heading">
       <div class="container container-narrow text-center">
         <p class="section-tag">//// GET STARTED</p>
@@ -645,15 +578,9 @@
       <div class="footer-bottom">
         <p>&copy; 2026 Armory. All rights reserved.</p>
         <div class="footer-social">
-          <a href="#" aria-label="Armory on Twitter">
-            <img src="assets/icons/interface/link.svg" alt="" aria-hidden="true" width="16" height="16"/>
-          </a>
-          <a href="#" aria-label="Armory on LinkedIn">
-            <img src="assets/icons/interface/link.svg" alt="" aria-hidden="true" width="16" height="16"/>
-          </a>
-          <a href="#" aria-label="Armory on GitHub">
-            <img src="assets/icons/interface/link.svg" alt="" aria-hidden="true" width="16" height="16"/>
-          </a>
+          <a href="#" aria-label="Armory on Twitter"><img src="assets/icons/interface/link.svg" alt="" aria-hidden="true" width="16" height="16"/></a>
+          <a href="#" aria-label="Armory on LinkedIn"><img src="assets/icons/interface/link.svg" alt="" aria-hidden="true" width="16" height="16"/></a>
+          <a href="#" aria-label="Armory on GitHub"><img src="assets/icons/interface/link.svg" alt="" aria-hidden="true" width="16" height="16"/></a>
         </div>
       </div>
     </div>

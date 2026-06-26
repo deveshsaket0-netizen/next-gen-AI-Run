@@ -1,6 +1,6 @@
-
+/* globals and css vars */
 :root {
-  /* Brand palette */
+  /* color palette */
   --arctic-powder:        #F1F6F4;
   --forsythia:            #FFC801;
   --nocturnal-expedition: #114C5A;
@@ -8,7 +8,7 @@
   --deep-saffron:         #FF9932;
   --oceanic-noir:         #172836;
 
-  /* Surface colors */
+  /* surfaces */
   --bg-base:     #000000;
   --bg-dark:     #080808;
   --bg-darker:   #0c0c0c;
@@ -16,41 +16,38 @@
   --bg-card-alt: #161616;
   --bg-border:   #1e1e1e;
 
-  /* Text */
+  /* typography & text */
   --text-primary:   var(--arctic-powder);
   --text-secondary: var(--mystic-mint);
   --text-muted:     #6b7280;
   --text-accent:    var(--forsythia);
 
-  /* Accent */
   --accent:         var(--forsythia);
   --accent-hover:   var(--deep-saffron);
   --accent-glow:    rgba(255, 200, 1, 0.15);
   --teal:           var(--nocturnal-expedition);
   --teal-bright:    #1a7a8a;
 
-  /* Typography */
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Spacing */
+  /* sizing */
   --container-max: 1200px;
   --section-pad:   120px;
   --section-pad-sm: 64px;
 
-  /* Radius */
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
 
-  /* Transitions — per brief */
-  --t-micro:     150ms ease-out;   /* hovers/toggles */
+  /* animation curves */
+  --t-micro:     150ms ease-out;   
   --t-micro-max: 200ms ease-out;
-  --t-layout:    300ms ease-in-out; /* structural reflows */
+  --t-layout:    300ms ease-in-out; 
   --t-layout-max:400ms ease-in-out;
 }
 
-/* Reset */
+/* basic resets */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
 body {
@@ -66,7 +63,7 @@ ul { list-style: none; }
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; background: none; font: inherit; }
 
-/*  Accessebility */
+/* a11y utils */
 .sr-only {
   position: absolute; width: 1px; height: 1px;
   padding: 0; margin: -1px; overflow: hidden;
@@ -77,7 +74,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   outline-offset: 3px;
 }
 
-/* Loader */
+/* app loader */
 #loader {
   position: fixed;
   inset: 0;
@@ -117,7 +114,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   to { opacity: 0; pointer-events: none; }
 }
 
-/* Container */
+/* common container stuff */
 .container {
   max-width: var(--container-max);
   margin: 0 auto;
@@ -128,12 +125,11 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 }
 .text-center { text-align: center; }
 
-/* Section */
+/* layout wrappers */
 .section-dark   { background: var(--bg-dark);   padding: var(--section-pad) 0; }
 .section-darker { background: var(--bg-darker); padding: var(--section-pad) 0; }
 .section-cta    { background: var(--bg-darker); padding: var(--section-pad) 0; }
 
-/* Section Text */
 .section-tag {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -158,7 +154,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   max-width: 600px;
 }
 
-/* Scroll reveal */
+/* js scroll reveal triggers */
 .reveal-up {
   opacity: 0;
   transform: translateY(28px);
@@ -172,7 +168,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   .reveal-up { opacity: 1; transform: none; transition: none; }
 }
 
-/* nav */
+/* header & navigation */
 #site-header {
   position: sticky;
   top: 0;
@@ -243,7 +239,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   transition: transform var(--t-micro), opacity var(--t-micro);
 }
 
-/*hero*/
+/* hero block */
 .section-hero {
   position: relative;
   min-height: 100vh;
@@ -253,7 +249,6 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   background: var(--bg-base);
   padding: 120px 0 80px;
 }
-/* Pixel grid background */
 .hero-bg-grid {
   position: absolute;
   inset: 0;
@@ -264,7 +259,6 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   opacity: 0.4;
   pointer-events: none;
 }
-/* Glow */
 .hero-bg-glow {
   position: absolute;
   top: 20%;
@@ -286,7 +280,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   text-align: center;
   gap: 24px;
 }
-/* Logos */
+/* scrolling marquee */
 .hero-logos {
   width: 100%;
   overflow: hidden;
@@ -372,7 +366,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   color: var(--forsythia);
 }
 
-/* Buttons*/
+/* global button styles */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -426,7 +420,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 }
 .link-arrow:hover { gap: 10px; }
 
-/*Case studies*/
+/* cases */
 .case-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -457,7 +451,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 }
 .case-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; flex: 1; }
 
-/*Product */
+/* node graph visualizer */
 .product-visual {
   margin-top: 48px;
   display: flex;
@@ -496,7 +490,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .node-connector { color: var(--text-muted); }
 .node-connector img { filter: invert(0.5); }
 
-/* Stats */
+/* stats row */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -536,7 +530,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   letter-spacing: 0.05em;
 }
 
-/* Approach */
+/* how it works block */
 .approach-steps {
   display: flex;
   flex-direction: column;
@@ -572,7 +566,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   margin-left: 15px;
 }
 
-/* Features2 */
+/* features grid (swaps with accordion) */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -580,11 +574,9 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   gap: 16px;
   margin-top: 48px;
 }
-/* Large card — spans 2 cols */
 .bento-lg {
   grid-column: span 2;
 }
-/* Right-side large — reset if needed */
 .bento-lg-right {
   grid-column: span 2;
 }
@@ -597,11 +589,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   flex-direction: column;
   gap: 12px;
   cursor: pointer;
-  transition:
-    border-color var(--t-micro-max),
-    background var(--t-micro-max),
-    transform var(--t-micro-max),
-    box-shadow var(--t-micro-max);
+  transition: border-color var(--t-micro-max), background var(--t-micro-max), transform var(--t-micro-max), box-shadow var(--t-micro-max);
   outline: none;
 }
 .bento-card:hover,
@@ -645,7 +633,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   align-self: flex-start;
 }
 
-/*  Mobile  */
+/* mobile accordion for features */
 .accordion-list { margin-top: 48px; }
 .accordion-item {
   border: 1px solid var(--bg-border);
@@ -705,7 +693,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 }
 .accordion-item.active .accordion-body { max-height: 200px; }
 
-/* Integration */
+/* integrations grid */
 .integrations-grid {
   display: flex;
   flex-wrap: wrap;
@@ -732,7 +720,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   transform: translateY(-2px);
 }
 
-/* pricing */
+/* pricing section */
 .pricing-controls {
   display: flex;
   align-items: center;
@@ -906,7 +894,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .testimonial-card cite strong { font-size: 14px; color: var(--text-primary); font-weight: 600; }
 .testimonial-card cite span  { font-size: 12px; color: var(--text-muted); font-family: var(--font-mono); }
 
-/* FaQ */
+/* faq list */
 .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 8px; }
 .faq-item {
   background: var(--bg-card);
@@ -940,7 +928,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .faq-answer { padding: 0 24px 20px; }
 .faq-answer p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
 
-/* CTA */
+/* email signup cta */
 .cta-form {
   display: flex;
   gap: 12px;
@@ -965,7 +953,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .cta-input:focus { outline: none; border-color: var(--forsythia); }
 .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
-/* Footer */
+/* footer area */
 .site-footer {
   background: var(--bg-darker);
   border-top: 1px solid var(--bg-border);
@@ -1009,7 +997,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .footer-social a:hover { border-color: var(--forsythia); background: var(--accent-glow); }
 .footer-social img { filter: invert(0.5); }
 
-/* Hero Entry */
+/* hero load animations */
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -1024,11 +1012,8 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .section-hero .hero-sub   { animation: fade-in-up 0.3s ease-out 0.18s both; }
 .section-hero .hero-actions { animation: fade-in-up 0.3s ease-out 0.25s both; }
 .section-hero .hero-competencies { animation: fade-in-up 0.3s ease-out 0.32s both; }
-/* All animations end by ~320ms — well within 500ms cap */
 
-/* Responsive breakpoint */
-
-/* Tablet: ≤ 900px */
+/* responsive shifts */
 @media (max-width: 900px) {
   :root {
     --section-pad: var(--section-pad-sm);
@@ -1042,7 +1027,6 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   .bento-lg, .bento-lg-right { grid-column: span 2; }
 }
 
-/* Mobile: ≤ 640px — bento switches to accordion */
 @media (max-width: 640px) {
   .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--bg-base); border-bottom: 1px solid var(--bg-border); padding: 20px 24px; gap: 20px; }
   .nav-links.open { display: flex; }
