@@ -8,9 +8,9 @@ A premium, high-converting landing page built under a strict 4-hour sprint const
 
 🔗 Submission Links
 
-Live Deployment: [[Insert your Vercel/Netlify link here]](https://next-gen-ai-101.vercel.app/)
+Live Deployment: [[]](https://next-gen-ai-101.vercel.app/)
 
-Demo Video: [Armory — AI Automation Platform](https://drive.google.com/file/d/1vnRlUo5DD-5KY937Q78EEehAAQJVK_KQ/view?usp=sharing)
+Demo Video: [](https://drive.google.com/file/d/1vnRlUo5DD-5KY937Q78EEehAAQJVK_KQ/view?usp=sharing)
 
 FrontEnd Battle 3.0 - VibeCoding Competition (IIT Bhubaneswar) Submission
 
